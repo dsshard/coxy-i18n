@@ -39,11 +39,12 @@ async function run () {
       const locale = fileName.split('.')[0]
       const fileDataRaw = fs.readFileSync(file).toString()
       const fileData = JSON.parse(fileDataRaw)
-      const filePathLocale = Object.keys(fileData)[0]
+      const filePathKeys = Object.keys(fileData)
+      filePathKeys.forEach((filePathLocale) => {
+        if (!result[filePathLocale]) result[filePathLocale] = {}
 
-      if (!result[filePathLocale]) result[filePathLocale] = {}
-
-      result[filePathLocale][locale] = fileData[filePathLocale]
+        result[filePathLocale][locale] = fileData[filePathLocale]
+      })
     })
   }
 
