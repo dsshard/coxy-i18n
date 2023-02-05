@@ -13,11 +13,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "resolveJsonModule": true,
-    "rootDir": "src",
+    "rootDir": "./",
     "outDir": "./dist",
     "baseUrl": "./src",
   },
-  "include": ["./src/**/*", "./src/**/*.json"],
+  "include": ["./src/**/*", "./src/**/*.json", "./bin/**/*"],
   "exclude": [
     "**/*.d.ts",
     "./node_modules",
