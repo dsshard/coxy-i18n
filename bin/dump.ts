@@ -13,13 +13,13 @@ program
   .description('CLI utils for i18n')
   .addOption(new Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
   .option('-p, --path [dir]', 'path for root dir')
-  .requiredOption('-o, --output [name] ', 'output dir')
+  .requiredOption('-d, --dir [name] ', 'output dir')
 
 program.parse()
 
 const opts = program.opts()
 
-const rootPath = opts.path.replace(/\/$/, '') || '.'
+const rootPath = opts?.path?.replace(/\/$/, '') || '.'
 const outDir = `${rootPath}/${opts.output}`.replace(/\/$/, '')
 const mode = opts.mode
 

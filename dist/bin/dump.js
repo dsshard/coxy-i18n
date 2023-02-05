@@ -3,6 +3,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fast_glob_1 = __importDefault(require("fast-glob"));
 const commander_1 = require("commander");
@@ -14,10 +15,10 @@ program
     .description('CLI utils for i18n')
     .addOption(new commander_1.Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
     .option('-p, --path [dir]', 'path for root dir')
-    .requiredOption('-o, --output [name] ', 'output dir');
+    .requiredOption('-d, --dir [name] ', 'output dir');
 program.parse();
 const opts = program.opts();
-const rootPath = opts.path.replace(/\/$/, '') || '.';
+const rootPath = ((_a = opts === null || opts === void 0 ? void 0 : opts.path) === null || _a === void 0 ? void 0 : _a.replace(/\/$/, '')) || '.';
 const outDir = `${rootPath}/${opts.output}`.replace(/\/$/, '');
 const mode = opts.mode;
 if (!fs_1.default.existsSync(outDir)) {

@@ -13,12 +13,12 @@ program
   .description('CLI utils for i18n')
   .addOption(new Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
   .option('-p, --path [dir]', 'path for root dir')
-  .requiredOption('-b, --baseDir [name] ', 'base directory for restore')
+  .requiredOption('-d, --dir [name] ', 'base directory for restore')
 
 program.parse()
 
 const opts = program.opts()
-const rootPath = opts.path.replace(/\/$/, '') || '.'
+const rootPath = opts?.path?.replace(/\/$/, '') || '.'
 const baseDir = opts.baseDir.replace(/\/$/, '')
 const mode = opts.mode
 
