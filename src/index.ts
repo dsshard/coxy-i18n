@@ -36,14 +36,16 @@ export function mergeContent<T> (contents: Array<T>, options: CreateOptions): T[
   return response
 }
 
-export function createUseI18N (options: CreateOptions) {
-  return function i18N<T> (...objects: Array<T>): {
-    t: (key: keyof T[keyof T], variables?: ParamValues) => string,
-    language: string
-  } {
+type ReturnI18n<T> = {
+  t: (key: keyof T[keyof T], variables?: ParamValues) => string,
+  language: string
+}
+
+export function createUseI18N (options: CreateOptions): <T>(...objects: Array<T>) => ReturnI18n<T> {
+  return function i18N (...objects) {
     const section = mergeContent(objects, options)
 
-    const t = useCallback((key: keyof T[keyof T], variables?: ParamValues): string =>
+    const t = useCallback((key, variables): string =>
       processI18N(section, {
         key,
         variables
