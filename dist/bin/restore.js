@@ -3,7 +3,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fast_glob_1 = __importDefault(require("fast-glob"));
 const commander_1 = require("commander");
@@ -19,7 +19,7 @@ program
 program.parse();
 const opts = program.opts();
 const rootPath = ((_a = opts === null || opts === void 0 ? void 0 : opts.path) === null || _a === void 0 ? void 0 : _a.replace(/\/$/, '')) || '.';
-const baseDir = opts.baseDir.replace(/\/$/, '');
+const baseDir = (_b = opts === null || opts === void 0 ? void 0 : opts.dir) === null || _b === void 0 ? void 0 : _b.replace(/\/$/, '');
 const mode = opts.mode;
 async function run() {
     const dirForFiles = path_1.default.resolve(rootPath, baseDir);

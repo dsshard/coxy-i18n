@@ -20,7 +20,7 @@ program.parse()
 const opts = program.opts()
 
 const rootPath = opts?.path?.replace(/\/$/, '') || '.'
-const outDir = `${rootPath}/${opts.output}`.replace(/\/$/, '')
+const outDir = `${rootPath}/${opts.dir}`.replace(/\/$/, '')
 const mode = opts.mode
 
 if (!fs.existsSync(outDir)) {

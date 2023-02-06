@@ -19,7 +19,7 @@ program.parse()
 
 const opts = program.opts()
 const rootPath = opts?.path?.replace(/\/$/, '') || '.'
-const baseDir = opts.baseDir.replace(/\/$/, '')
+const baseDir = opts?.dir?.replace(/\/$/, '')
 const mode = opts.mode
 
 async function run () {

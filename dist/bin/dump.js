@@ -19,7 +19,7 @@ program
 program.parse();
 const opts = program.opts();
 const rootPath = ((_a = opts === null || opts === void 0 ? void 0 : opts.path) === null || _a === void 0 ? void 0 : _a.replace(/\/$/, '')) || '.';
-const outDir = `${rootPath}/${opts.output}`.replace(/\/$/, '');
+const outDir = `${rootPath}/${opts.dir}`.replace(/\/$/, '');
 const mode = opts.mode;
 if (!fs_1.default.existsSync(outDir)) {
     fs_1.default.mkdirSync(outDir);
