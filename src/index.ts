@@ -12,6 +12,11 @@ type CreateOptions = {
   selectedLang: string
 }
 
+function declOfNum (number: number, titles: string[]): string {
+  const cases = [2, 0, 1, 1, 1, 2]
+  return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]]
+}
+
 export function processI18N <T> (content: T, options: Options<T>): string {
   const { variables, key } = options
   let response = content[key as string]
@@ -22,8 +27,24 @@ export function processI18N <T> (content: T, options: Options<T>): string {
 
   Object.keys(variables).forEach((variable) => {
     const val = variables[variable]
-    response = response.replace(`{{${variable}}}`, String(val))
+    const reg = new RegExp(`{{${variable}}}`, 'g')
+    response = response.replace(reg, String(val))
   })
+
+  const testMatch = response.match(/(\[.+])/) // find [number|item1|item2|item3]
+  if (testMatch && testMatch[0]) {
+    const replaceString = testMatch[0]
+    const parseExpression = replaceString.match(/\[(.+)]/) // find number|item1|item2|item3
+
+    if (parseExpression && parseExpression[1] && parseExpression[1].indexOf('|') > -1) {
+      const [counter, ...strings] = parseExpression[1].split('|') // to number, item1, item2, item3
+      if (strings?.length > 0) {
+        const counterData = Number(counter)
+        response = response.replace(replaceString, declOfNum(counterData, strings))
+      }
+    }
+  }
+
   return response
 }
 
