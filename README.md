@@ -14,5 +14,5 @@ yarn i18n-dump --path ./ --output localizations --mode split
 
 ### Restore translations
 ```
-yarn i18n-dump --path ./ --baseDir localizations --mode split
+yarn i18n-restore --path ./ --baseDir localizations --mode split
 ```
