@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useI18N = exports.mergeContent = exports.processI18N = void 0;
+exports.useI18N = exports.mergeContent = exports.processI18N = exports.I18nProvider = exports.I18nContext = void 0;
 const react_1 = require("react");
 const context_1 = require("./context");
+Object.defineProperty(exports, "I18nContext", { enumerable: true, get: function () { return context_1.I18nContext; } });
+Object.defineProperty(exports, "I18nProvider", { enumerable: true, get: function () { return context_1.I18nProvider; } });
 function declOfNum(number, titles) {
     const cases = [2, 0, 1, 1, 1, 2];
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
@@ -47,10 +49,15 @@ function useI18N(...objects) {
         language: context.language,
         fallback: context.fallback
     });
-    const t = (0, react_1.useCallback)((key, variables) => processI18N(section, {
-        key,
-        variables
-    }), [context.language]);
+    const t = (0, react_1.useCallback)((key, variables) => {
+        if (context.dangerouslySetText) {
+            return context.dangerouslySetText;
+        }
+        return processI18N(section, {
+            key,
+            variables
+        });
+    }, [context]);
     return { t, language: context.language };
 }
 exports.useI18N = useI18N;

@@ -1,6 +1,8 @@
 import { useCallback, useContext } from 'react'
 
-import { I18nContext } from './context'
+import { I18nContext, I18nProvider } from './context'
+
+export { I18nContext, I18nProvider }
 
 type ParamValues = Record<string, string | number | undefined>
 
@@ -79,12 +81,15 @@ export function useI18N<T> (...objects: Array<T>) {
   })
 
   type Key = keyof T[keyof T]
-  // prettier-ignore
-  const t = useCallback((key: Key, variables?: ParamValues): string =>
-    processI18N(section, {
+  const t = useCallback((key: Key, variables?: ParamValues): string => {
+    if (context.dangerouslySetText) {
+      return context.dangerouslySetText
+    }
+    return processI18N(section, {
       key,
       variables
-    }), [context.language])
+    })
+  }, [context])
 
   return { t, language: context.language } as const
 }
