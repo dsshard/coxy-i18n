@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUseI18N = exports.mergeContent = exports.processI18N = void 0;
+exports.useI18N = exports.mergeContent = exports.processI18N = void 0;
 const react_1 = require("react");
+const context_1 = require("./context");
 function declOfNum(number, titles) {
     const cases = [2, 0, 1, 1, 1, 2];
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
@@ -35,19 +36,21 @@ exports.processI18N = processI18N;
 function mergeContent(contents, options) {
     const response = {};
     contents.forEach((obj) => {
-        Object.assign(response, obj[options.defaultLang], obj[options.selectedLang]);
+        Object.assign(response, obj[options.fallback], obj[options.language]);
     });
     return response;
 }
 exports.mergeContent = mergeContent;
-function createUseI18N(options) {
-    return function i18N(...objects) {
-        const section = mergeContent(objects, options);
-        const t = (0, react_1.useCallback)((key, variables) => processI18N(section, {
-            key,
-            variables
-        }), [options.selectedLang]);
-        return { t, language: options.selectedLang };
-    };
+function useI18N(...objects) {
+    const context = (0, react_1.useContext)(context_1.I18nContext);
+    const section = mergeContent(objects, {
+        language: context.language,
+        fallback: context.fallback
+    });
+    const t = (0, react_1.useCallback)((key, variables) => processI18N(section, {
+        key,
+        variables
+    }), [context.language]);
+    return { t, language: context.language };
 }
-exports.createUseI18N = createUseI18N;
+exports.useI18N = useI18N;

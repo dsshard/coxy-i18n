@@ -1,4 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
+
+import { I18nContext } from './context'
 
 type ParamValues = Record<string, string | number | undefined>
 
@@ -8,8 +10,8 @@ type Options<T> = {
 }
 
 type CreateOptions = {
-  defaultLang: string,
-  selectedLang: string
+  fallback: string,
+  language: string
 }
 
 function declOfNum (number: number, titles: string[]): string {
@@ -52,26 +54,37 @@ export function mergeContent<T> (contents: Array<T>, options: CreateOptions): T[
   const response = {} as T[keyof T]
 
   contents.forEach((obj) => {
-    Object.assign(response, obj[options.defaultLang], obj[options.selectedLang])
+    Object.assign(response, obj[options.fallback], obj[options.language])
   })
   return response
 }
 
-type ReturnI18n<T> = {
-  t: (key: keyof T[keyof T], variables?: ParamValues) => string,
+type Ret<T> = {
+  t: (key: keyof T[keyof T], variables?: ParamValues) => string
   language: string
 }
 
-export function createUseI18N (options: CreateOptions): <T>(...objects: Array<T>) => ReturnI18n<T> {
-  return function i18N (...objects) {
-    const section = mergeContent(objects, options)
+export function useI18N<C>(c: C): Ret<C>
+export function useI18N<C, O>(c: C, o: O): Ret<C & O>
+export function useI18N<C, O, X>(c: C, o: O, x: X): Ret<C & O & X>
+export function useI18N<C, O, X, Y>(c: C, o: O, x: X, y: Y): Ret<C & O & X & Y>
+export function useI18N<C, O, X, Y, S>(c: C, o: O, x: X, y: Y, s: S): Ret<C & O & X & Y & S>
+export function useI18N<C, O, X, Y, S, E>(c: C, o: O, x: X, y: Y, s: S, e: E): Ret<C & O & X & Y & S & E>
 
-    const t = useCallback((key, variables): string =>
-      processI18N(section, {
-        key,
-        variables
-      }), [options.selectedLang])
+export function useI18N<T> (...objects: Array<T>) {
+  const context = useContext(I18nContext)
+  const section = mergeContent(objects, {
+    language: context.language,
+    fallback: context.fallback
+  })
 
-    return { t, language: options.selectedLang }
-  }
+  type Key = keyof T[keyof T]
+  // prettier-ignore
+  const t = useCallback((key: Key, variables?: ParamValues): string =>
+    processI18N(section, {
+      key,
+      variables
+    }), [context.language])
+
+  return { t, language: context.language } as const
 }
