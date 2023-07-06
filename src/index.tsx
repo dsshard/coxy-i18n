@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 
 import { I18nContext, I18nProvider } from './context'
 
@@ -21,6 +21,11 @@ function declOfNum (number: number, titles: string[]): string {
   return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]]
 }
 
+function hasI18nKey<T> (content: T, options: Options<T>): boolean {
+  const { key } = options
+  return !!content[key as string]
+}
+
 export function processI18N <T> (content: T, options: Options<T>): string {
   const { variables, key } = options
   let response = content[key as string]
@@ -29,12 +34,13 @@ export function processI18N <T> (content: T, options: Options<T>): string {
     return response
   }
 
+  // replace variables
   Object.keys(variables).forEach((variable) => {
-    const val = variables[variable]
     const reg = new RegExp(`{{${variable}}}`, 'g')
-    response = response.replace(reg, String(val))
+    response = response.replace(reg, String(variables[variable]))
   })
 
+  // for declOfNum
   const testMatch = response.match(/(\[.+])/) // find [number|item1|item2|item3]
   if (testMatch && testMatch[0]) {
     const replaceString = testMatch[0]
@@ -56,7 +62,7 @@ export function mergeContent<T> (contents: Array<T>, options: CreateOptions): T[
   const response = {} as T[keyof T]
 
   contents.forEach((obj) => {
-    Object.assign(response, obj[options.fallback], obj[options.language])
+    Object.assign(response, obj[options.fallback] || {}, obj[options.language] || {})
   })
   return response
 }
@@ -75,21 +81,29 @@ export function useI18N<C, O, X, Y, S, E>(c: C, o: O, x: X, y: Y, s: S, e: E): R
 
 export function useI18N<T> (...objects: Array<T>) {
   const context = useContext(I18nContext)
-  const section = mergeContent(objects, {
+  const section = useMemo(() => mergeContent(objects, {
     language: context.language,
     fallback: context.fallback
-  })
+  }), [context])
 
   type Key = keyof T[keyof T]
   const t = useCallback((key: Key, variables?: ParamValues): string => {
-    if (context.dangerouslySetText) {
-      return context.dangerouslySetText
-    }
-    return processI18N(section, {
+    const options = {
       key,
       variables
-    })
+    }
+
+    const isKey = hasI18nKey(section, options)
+    if (!isKey && context.replaceUndefinedKey) {
+      return context.replaceUndefinedKey(key)
+    }
+
+    if (isKey && context.dangerouslySetText) {
+      return context.dangerouslySetText
+    }
+
+    return processI18N(section, options)
   }, [context])
 
-  return { t, language: context.language } as const
+  return { t, hasKey: hasI18nKey, language: context.language } as const
 }

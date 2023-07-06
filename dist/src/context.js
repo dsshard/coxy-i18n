@@ -28,10 +28,11 @@ const react_1 = __importStar(require("react"));
 exports.I18nContext = (0, react_1.createContext)({
     language: null,
     fallback: null,
-    dangerouslySetText: undefined
+    dangerouslySetText: undefined,
+    replaceUndefinedKey: undefined
 });
 const I18nProvider = (props) => {
-    const { fallback, language, dangerouslySetText } = props;
-    return (react_1.default.createElement(exports.I18nContext.Provider, { value: { fallback, language, dangerouslySetText } }, props.children));
+    const { children, fallback, language, dangerouslySetText, replaceUndefinedKey } = props;
+    return (react_1.default.createElement(exports.I18nContext.Provider, { value: { fallback, language, dangerouslySetText, replaceUndefinedKey } }, children));
 };
 exports.I18nProvider = I18nProvider;

@@ -9,6 +9,10 @@ function declOfNum(number, titles) {
     const cases = [2, 0, 1, 1, 1, 2];
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 }
+function hasI18nKey(content, options) {
+    const { key } = options;
+    return !!content[key];
+}
 function processI18N(content, options) {
     const { variables, key } = options;
     let response = content[key];
@@ -16,9 +20,8 @@ function processI18N(content, options) {
         return response;
     }
     Object.keys(variables).forEach((variable) => {
-        const val = variables[variable];
         const reg = new RegExp(`{{${variable}}}`, 'g');
-        response = response.replace(reg, String(val));
+        response = response.replace(reg, String(variables[variable]));
     });
     const testMatch = response.match(/(\[.+])/);
     if (testMatch && testMatch[0]) {
@@ -38,26 +41,31 @@ exports.processI18N = processI18N;
 function mergeContent(contents, options) {
     const response = {};
     contents.forEach((obj) => {
-        Object.assign(response, obj[options.fallback], obj[options.language]);
+        Object.assign(response, obj[options.fallback] || {}, obj[options.language] || {});
     });
     return response;
 }
 exports.mergeContent = mergeContent;
 function useI18N(...objects) {
     const context = (0, react_1.useContext)(context_1.I18nContext);
-    const section = mergeContent(objects, {
+    const section = (0, react_1.useMemo)(() => mergeContent(objects, {
         language: context.language,
         fallback: context.fallback
-    });
+    }), [context]);
     const t = (0, react_1.useCallback)((key, variables) => {
-        if (context.dangerouslySetText) {
-            return context.dangerouslySetText;
-        }
-        return processI18N(section, {
+        const options = {
             key,
             variables
-        });
+        };
+        const isKey = hasI18nKey(section, options);
+        if (!isKey && context.replaceUndefinedKey) {
+            return context.replaceUndefinedKey(key);
+        }
+        if (isKey && context.dangerouslySetText) {
+            return context.dangerouslySetText;
+        }
+        return processI18N(section, options);
     }, [context]);
-    return { t, language: context.language };
+    return { t, hasKey: hasI18nKey, language: context.language };
 }
 exports.useI18N = useI18N;

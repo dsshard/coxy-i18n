@@ -4,19 +4,21 @@ type ContextProps = {
   language: string | null,
   fallback: string | null,
   dangerouslySetText?: string
+  replaceUndefinedKey?: (key: string) => string
 }
 
 export const I18nContext = createContext({
   language: null,
   fallback: null,
-  dangerouslySetText: undefined
+  dangerouslySetText: undefined,
+  replaceUndefinedKey: undefined
 })
 
-export const I18nProvider = (props: PropsWithChildren & ContextProps) => {
-  const { fallback, language, dangerouslySetText } = props
+export const I18nProvider = (props: PropsWithChildren<ContextProps>) => {
+  const { children, fallback, language, dangerouslySetText, replaceUndefinedKey } = props
   return (
-    <I18nContext.Provider value={{ fallback, language, dangerouslySetText }}>
-      {props.children}
+    <I18nContext.Provider value={{ fallback, language, dangerouslySetText, replaceUndefinedKey }}>
+      {children}
     </I18nContext.Provider>
   )
 }
