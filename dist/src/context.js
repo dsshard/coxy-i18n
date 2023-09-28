@@ -29,10 +29,18 @@ exports.I18nContext = (0, react_1.createContext)({
     language: null,
     fallback: null,
     dangerouslySetText: undefined,
-    replaceUndefinedKey: undefined
+    replaceUndefinedKey: undefined,
+    setLanguage: undefined
 });
 const I18nProvider = (props) => {
     const { children, fallback, language, dangerouslySetText, replaceUndefinedKey } = props;
-    return (react_1.default.createElement(exports.I18nContext.Provider, { value: { fallback, language, dangerouslySetText, replaceUndefinedKey } }, children));
+    const [lang, setLanguage] = (0, react_1.useState)(language);
+    return (react_1.default.createElement(exports.I18nContext.Provider, { value: {
+            fallback,
+            language: lang,
+            dangerouslySetText,
+            replaceUndefinedKey,
+            setLanguage
+        } }, children));
 };
 exports.I18nProvider = I18nProvider;
