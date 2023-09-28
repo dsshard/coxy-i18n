@@ -1,5 +1,9 @@
 # @coxy/i18n
 
+Component localization for react. Allows you to translate components individually, without storing huge localization files. Try. It's comfortable.
+
+You can upload all translations with one command into one or several files. Then create a new translation file and import back into all files.
+
 ### Install
 
 ```shell
@@ -26,7 +30,7 @@ import locales from './index.i18n.json'
 
 const { t } = useI18n(locales)
 
-return <div>{t('title')}</div>
+return <div>{t('title', {test: 123})}</div>
 ```
 
 in `index.i18n.json` write
@@ -34,10 +38,10 @@ in `index.i18n.json` write
 ```json
 {
   "en": {
-    "title": "Title string"
+    "title": "Title string {{test}}"
   },
   "es": {
-    "title": "Cadena de título"
+    "title": "Cadena de título {{test}}"
   }
 }
 ```
