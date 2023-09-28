@@ -1,6 +1,6 @@
 {
   "name": "@coxy/i18n",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "author": "Steven Green <dsshard@gmail.com>",
