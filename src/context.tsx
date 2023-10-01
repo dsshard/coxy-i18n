@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useState } from 'react'
+import React, { createContext, PropsWithChildren, useEffect, useState } from 'react'
 
 type ContextProps = {
   language: string | null,
@@ -22,6 +22,14 @@ export const I18nProvider = (props: PropsWithChildren<ContextProps>) => {
   const { children, fallback, language, dangerouslySetText, replaceUndefinedKey } = props
   const [currentLang, setLanguage] = useState(language)
   const [fallbackLang, setFallback] = useState(fallback)
+
+  useEffect(() => {
+    setLanguage(language)
+  }, [language])
+
+  useEffect(() => {
+    setFallback(fallback)
+  }, [fallback])
 
   return (
     <I18nContext.Provider value={{

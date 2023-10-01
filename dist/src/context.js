@@ -30,17 +30,26 @@ exports.I18nContext = (0, react_1.createContext)({
     fallback: null,
     dangerouslySetText: undefined,
     replaceUndefinedKey: undefined,
-    setLanguage: undefined
+    setLanguage: undefined,
+    setFallback: undefined
 });
 const I18nProvider = (props) => {
     const { children, fallback, language, dangerouslySetText, replaceUndefinedKey } = props;
-    const [lang, setLanguage] = (0, react_1.useState)(language);
+    const [currentLang, setLanguage] = (0, react_1.useState)(language);
+    const [fallbackLang, setFallback] = (0, react_1.useState)(fallback);
+    (0, react_1.useEffect)(() => {
+        setLanguage(language);
+    }, [language]);
+    (0, react_1.useEffect)(() => {
+        setFallback(fallback);
+    }, [fallback]);
     return (react_1.default.createElement(exports.I18nContext.Provider, { value: {
-            fallback,
-            language: lang,
+            fallback: fallbackLang,
+            language: currentLang,
             dangerouslySetText,
             replaceUndefinedKey,
-            setLanguage
+            setLanguage,
+            setFallback
         } }, children));
 };
 exports.I18nProvider = I18nProvider;
