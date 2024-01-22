@@ -9,11 +9,13 @@ const fast_glob_1 = __importDefault(require("fast-glob"));
 const commander_1 = require("commander");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const config_1 = require("./config");
 const program = new commander_1.Command();
 program
     .version('0.1.0')
     .description('CLI utils for i18n')
     .addOption(new commander_1.Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
+    .addOption(new commander_1.Option('-i, --inline', 'is inline mode').default(false))
     .option('-p, --path [dir]', 'path for root dir')
     .requiredOption('-d, --dir [name] ', 'output dir');
 program.parse();
@@ -21,8 +23,25 @@ const opts = program.opts();
 const rootPath = ((_a = opts === null || opts === void 0 ? void 0 : opts.path) === null || _a === void 0 ? void 0 : _a.replace(/\/$/, '')) || '.';
 const outDir = `${rootPath}/${opts.dir}`.replace(/\/$/, '');
 const mode = opts.mode;
+const isInline = opts.inline;
+if (isInline && mode === 'single') {
+    throw new Error('inline mode working only for mode split');
+}
 if (!fs_1.default.existsSync(outDir)) {
     fs_1.default.mkdirSync(outDir);
+}
+function prepareIsInlineMode(data) {
+    if (!isInline)
+        return data;
+    return Object.keys(data).reduce((acc, path) => {
+        const elements = data[path];
+        Object.keys(elements).forEach((elementKey) => {
+            const value = elements[elementKey];
+            const newPath = `${String(path)}${config_1.DELIMITER}${String(elementKey)}`;
+            acc[newPath] = value;
+        });
+        return acc;
+    }, {});
 }
 async function run() {
     const files = await (0, fast_glob_1.default)(`${rootPath}/**/*.i18n.json`, {
@@ -53,12 +72,12 @@ async function run() {
             });
         });
         Object.keys(locales).forEach((locale) => {
-            const writeData = JSON.stringify(locales[locale], null, 2);
+            const writeData = JSON.stringify(prepareIsInlineMode(locales[locale]), null, 2);
             fs_1.default.writeFileSync(path_1.default.resolve(outDir, `${locale}.json`), writeData, 'utf-8');
         });
     }
     if (mode === 'single') {
-        const writeData = JSON.stringify(result, null, 2);
+        const writeData = JSON.stringify(prepareIsInlineMode(result), null, 2);
         fs_1.default.writeFileSync(path_1.default.resolve(outDir, 'locales.json'), writeData, 'utf-8');
     }
 }
