@@ -15,6 +15,7 @@ program
   .description('CLI utils for i18n')
   .addOption(new Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
   .addOption(new Option('-i, --inline', 'is inline mode').default(false))
+  .addOption(new Option('-m, --merge', 'merge content').default(true))
   .option('-p, --path [dir]', 'path for root dir')
   .requiredOption('-d, --dir [name] ', 'base directory for restore')
 
@@ -24,6 +25,7 @@ const opts = program.opts()
 const rootPath = opts?.path?.replace(/\/$/, '') || '.'
 const baseDir = opts?.dir?.replace(/\/$/, '')
 const mode = opts.mode
+const isMerge = opts.merge
 const isInline = opts.inline
 
 if (isInline && mode === 'single') {
@@ -81,7 +83,15 @@ async function run () {
 
   Object.keys(result).forEach((filePath) => {
     const filePathForSave = path.resolve(rootPath, filePath)
-    const fileData = result[filePath]
+    let fileData = result[filePath]
+
+    if (isMerge) {
+      const fileDataRaw = fs.readFileSync(filePathForSave).toString()
+      if (fileDataRaw.length) {
+        const raw = JSON.parse(fileDataRaw)
+        fileData = Object.assign({}, raw, fileData)
+      }
+    }
 
     fs.writeFileSync(filePathForSave, JSON.stringify(fileData, null, 2), 'utf-8')
   })

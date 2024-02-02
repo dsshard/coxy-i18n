@@ -35,7 +35,8 @@ if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir)
 }
 
-function prepareIsInlineMode (data: Record<string, Record<string, string>>): Record<string, string> | Record<string, Record<string, string>> {
+function prepareIsInlineMode (data: Record<string, Record<string, string>>):
+  Record<string, string> | Record<string, Record<string, string>> {
   if (!isInline) return data
 
   return Object.keys(data).reduce((acc, path) => {

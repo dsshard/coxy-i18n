@@ -16,6 +16,7 @@ program
     .description('CLI utils for i18n')
     .addOption(new commander_1.Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
     .addOption(new commander_1.Option('-i, --inline', 'is inline mode').default(false))
+    .addOption(new commander_1.Option('-m, --merge', 'merge content').default(true))
     .option('-p, --path [dir]', 'path for root dir')
     .requiredOption('-d, --dir [name] ', 'base directory for restore');
 program.parse();
@@ -23,6 +24,7 @@ const opts = program.opts();
 const rootPath = ((_a = opts === null || opts === void 0 ? void 0 : opts.path) === null || _a === void 0 ? void 0 : _a.replace(/\/$/, '')) || '.';
 const baseDir = (_b = opts === null || opts === void 0 ? void 0 : opts.dir) === null || _b === void 0 ? void 0 : _b.replace(/\/$/, '');
 const mode = opts.mode;
+const isMerge = opts.merge;
 const isInline = opts.inline;
 if (isInline && mode === 'single') {
     throw new Error('inline mode working only for mode split');
@@ -70,7 +72,14 @@ async function run() {
     }
     Object.keys(result).forEach((filePath) => {
         const filePathForSave = path_1.default.resolve(rootPath, filePath);
-        const fileData = result[filePath];
+        let fileData = result[filePath];
+        if (isMerge) {
+            const fileDataRaw = fs_1.default.readFileSync(filePathForSave).toString();
+            if (fileDataRaw.length) {
+                const raw = JSON.parse(fileDataRaw);
+                fileData = Object.assign({}, raw, fileData);
+            }
+        }
         fs_1.default.writeFileSync(filePathForSave, JSON.stringify(fileData, null, 2), 'utf-8');
     });
 }
