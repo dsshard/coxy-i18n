@@ -29,7 +29,9 @@
   },
   "dependencies": {
     "commander": "11.0.0",
-    "fast-glob": "3.3.0",
+    "fast-glob": "3.3.0"
+  },
+  "peerDependencies": {
     "react": ">=17"
   },
   "bin": {
