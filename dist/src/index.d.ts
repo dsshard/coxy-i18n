@@ -1,16 +1,6 @@
 import { I18nContext, I18nProvider } from './context';
 export { I18nContext, I18nProvider };
 type ParamValues = Record<string, string | number | undefined>;
-type Options<T> = {
-    variables?: ParamValues;
-    key: keyof T;
-};
-type CreateOptions = {
-    fallback: string;
-    language: string;
-};
-export declare function processI18N<T>(content: T, options: Options<T>): string;
-export declare function mergeContent<T>(contents: Array<T>, options: CreateOptions): T[keyof T];
 type Ret<T> = {
     t: (key: keyof T[keyof T], variables?: ParamValues) => string;
     language: string;
