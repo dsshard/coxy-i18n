@@ -15,7 +15,7 @@ program
   .description('CLI utils for i18n')
   .addOption(new Option('-m, --mode [type]', 'set mode').choices(['single', 'split']).default('single'))
   .addOption(new Option('-i, --inline', 'is inline mode').default(false))
-  .addOption(new Option('-m, --merge', 'merge content').default(true))
+  .addOption(new Option('-me, --merge', 'merge content').default(true))
   .option('-p, --path [dir]', 'path for root dir')
   .requiredOption('-d, --dir [name] ', 'base directory for restore')
 
