@@ -10,7 +10,8 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "semicolons": "asNeeded"
+      "semicolons": "asNeeded",
+      "trailingComma": "all"
     }
   },
   "linter": {
@@ -23,7 +24,7 @@
     "formatter": {
       "indentStyle": "space",
       "indentWidth": 2,
-      "trailingCommas": "all"
+      "trailingCommas": "none"
     },
     "linter": {
       "enabled": true
