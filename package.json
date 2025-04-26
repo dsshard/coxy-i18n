@@ -1,6 +1,6 @@
 {
   "name": "@coxy/i18n",
-  "version": "1.0.17",
+  "version": "1.1.0",
   "main": "dist/src/index.js",
   "module": "dist/index.mjs",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,9 @@
     "npm": "please-use-yarn",
     "yarn": "=1"
   },
-  "browserslist": ["> 1%, not dead"],
+  "browserslist": [
+    "> 1%, not dead"
+  ],
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/node": "22.15.2",
