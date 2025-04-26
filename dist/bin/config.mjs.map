@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../bin/config.ts"],"names":["DELIMITER"],"mappings":"AAAO,IAAMA,CAAY,CAAA","file":"config.mjs","sourcesContent":["export const DELIMITER = '-de-limit-er-'\n"]}

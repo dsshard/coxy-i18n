@@ -1,4 +1,2 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DELIMITER = void 0;
-exports.DELIMITER = '-de-limit-er-';
+'use strict';var e="-de-limit-er-";exports.DELIMITER=e;//# sourceMappingURL=config.js.map
+//# sourceMappingURL=config.js.map
