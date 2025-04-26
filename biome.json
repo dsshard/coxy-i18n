@@ -23,7 +23,7 @@
     "formatter": {
       "indentStyle": "space",
       "indentWidth": 2,
-      "trailingCommas": "none"
+      "trailingCommas": "all"
     },
     "linter": {
       "enabled": true

@@ -18,15 +18,15 @@
   "browserslist": ["> 1%, not dead"],
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/node": "22.10.2",
-    "@types/react": "19.0.1",
+    "@types/node": "22.15.2",
+    "@types/react": "19.1.2",
     "tsup": "8.4.0",
     "typescript": "5.8.3"
   },
   "dependencies": {
     "@coxy/i18n-process": "1.0.0",
-    "commander": "12.1.0",
-    "fast-glob": "3.3.2"
+    "commander": "13.1.0",
+    "fast-glob": "3.3.3"
   },
   "peerDependencies": {
     "react": ">=18"

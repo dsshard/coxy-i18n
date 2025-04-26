@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import glob from 'fast-glob'
 import { Command, Option } from 'commander'
+import glob from 'fast-glob'
 
-import path from 'node:path'
 import fs from 'node:fs'
+import path from 'node:path'
 
 import { DELIMITER } from './config'
 
@@ -32,7 +32,7 @@ if (isInline && mode === 'single') {
   throw new Error('inline mode working only for mode split')
 }
 
-function prepareIsInlineMode (data: Record<string, Record<string, string>>): Record<string, Record<string, string>> {
+function prepareIsInlineMode(data: Record<string, Record<string, string>>): Record<string, Record<string, string>> {
   if (!isInline) return data
 
   return Object.keys(data).reduce((acc, el) => {
@@ -43,7 +43,7 @@ function prepareIsInlineMode (data: Record<string, Record<string, string>>): Rec
   }, {})
 }
 
-async function run () {
+async function run() {
   const dirForFiles = path.resolve(rootPath, baseDir)
 
   let result = {}
