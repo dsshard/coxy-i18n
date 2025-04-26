@@ -1,5 +1,5 @@
-import { useCallback, useContext, useMemo } from 'react'
 import { hasI18nKey, mergeContent, processI18N } from '@coxy/i18n-process'
+import { useCallback, useContext, useMemo } from 'react'
 
 import { I18nContext, I18nProvider } from './context'
 
@@ -19,31 +19,40 @@ export function useI18N<C, O, X, Y>(c: C, o: O, x: X, y: Y): Ret<C & O & X & Y>
 export function useI18N<C, O, X, Y, S>(c: C, o: O, x: X, y: Y, s: S): Ret<C & O & X & Y & S>
 export function useI18N<C, O, X, Y, S, E>(c: C, o: O, x: X, y: Y, s: S, e: E): Ret<C & O & X & Y & S & E>
 
-export function useI18N<T> (...objects: Array<T>) {
+export function useI18N<T>(...objects: Array<T>) {
   const context = useContext(I18nContext)
-  const section = useMemo(() => mergeContent(objects, {
-    language: context.language,
-    fallback: context.fallback
-  }), [context])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  const section = useMemo(
+    () =>
+      mergeContent(objects, {
+        language: context.language,
+        fallback: context.fallback,
+      }),
+    [context],
+  )
 
   type Key = keyof T[keyof T]
-  const t = useCallback((key: Key, variables?: ParamValues): string => {
-    const options = {
-      key,
-      variables
-    }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  const t = useCallback(
+    (key: Key, variables?: ParamValues): string => {
+      const options = {
+        key,
+        variables,
+      }
 
-    const isKey = hasI18nKey(section, options)
-    if (!isKey && context.replaceUndefinedKey) {
-      return context.replaceUndefinedKey(key)
-    }
+      const isKey = hasI18nKey(section, options)
+      if (!isKey && context.replaceUndefinedKey) {
+        return context.replaceUndefinedKey(key)
+      }
 
-    if (isKey && context.dangerouslySetText) {
-      return context.dangerouslySetText
-    }
+      if (isKey && context.dangerouslySetText) {
+        return context.dangerouslySetText
+      }
 
-    return processI18N(section, options)
-  }, [context])
+      return processI18N(section, options)
+    },
+    [context],
+  )
 
   return { t, hasKey: hasI18nKey, language: context.language } as const
 }

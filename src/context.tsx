@@ -1,8 +1,8 @@
-import React, { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import React, { createContext, type PropsWithChildren, useEffect, useState } from 'react'
 
 type ContextProps = {
-  language: string | null,
-  fallback: string | null,
+  language: string | null
+  fallback: string | null
   dangerouslySetText?: string
   replaceUndefinedKey?: (key: string) => string
   setLanguage?: (key: string) => void
@@ -15,7 +15,7 @@ export const I18nContext = createContext({
   dangerouslySetText: undefined,
   replaceUndefinedKey: undefined,
   setLanguage: undefined,
-  setFallback: undefined
+  setFallback: undefined,
 })
 
 export const I18nProvider = (props: PropsWithChildren<ContextProps>) => {
@@ -32,16 +32,17 @@ export const I18nProvider = (props: PropsWithChildren<ContextProps>) => {
   }, [fallback])
 
   return (
-    <I18nContext.Provider value={{
-      fallback: fallbackLang,
-      language: currentLang,
-      dangerouslySetText,
-      replaceUndefinedKey,
-      setLanguage,
-      setFallback
-    }}>
+    <I18nContext.Provider
+      value={{
+        fallback: fallbackLang,
+        language: currentLang,
+        dangerouslySetText,
+        replaceUndefinedKey,
+        setLanguage,
+        setFallback,
+      }}
+    >
       {children}
     </I18nContext.Provider>
   )
 }
-

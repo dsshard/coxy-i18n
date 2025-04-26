@@ -3,8 +3,8 @@
 import glob from 'fast-glob'
 import { Command, Option } from 'commander'
 
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 import { DELIMITER } from './config'
 
@@ -55,18 +55,18 @@ async function run () {
       console.log('Files not found. use: [lang].json format file')
       return
     }
-    files.forEach((file) => {
+    for (const file of files) {
       const fileName = path.parse(file).base
       const locale = fileName.split('.')[0]
       const fileDataRaw = fs.readFileSync(file).toString()
       const fileData = prepareIsInlineMode(JSON.parse(fileDataRaw))
       const filePathKeys = Object.keys(fileData)
-      filePathKeys.forEach((filePathLocale) => {
+      for (const filePathLocale of filePathKeys) {
         if (!result[filePathLocale]) result[filePathLocale] = {}
 
         result[filePathLocale][locale] = fileData[filePathLocale]
-      })
-    })
+      }
+    }
   }
 
   if (mode === 'single') {
@@ -81,7 +81,7 @@ async function run () {
     result = JSON.parse(fileDataRaw)
   }
 
-  Object.keys(result).forEach((filePath) => {
+  for (const filePath of Object.keys(result)) {
     const filePathForSave = path.resolve(rootPath, filePath)
     let fileData = result[filePath]
 
@@ -94,7 +94,7 @@ async function run () {
     }
 
     fs.writeFileSync(filePathForSave, JSON.stringify(fileData, null, 2), 'utf-8')
-  })
+  }
 }
 
 void run()

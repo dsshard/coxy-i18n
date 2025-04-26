@@ -9,19 +9,15 @@
     "target": "es2017",
     "sourceMap": false,
     "jsx": "react",
-    "composite": true,
-    "incremental": true,
+    "composite": false,
+    "incremental": false,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "resolveJsonModule": true,
     "rootDir": "./",
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": "./src"
   },
   "include": ["./src/**/*", "./src/**/*.json", "./bin/**/*"],
-  "exclude": [
-    "**/*.d.ts",
-    "./node_modules",
-    "dist"
-  ]
+  "exclude": ["**/*.d.ts", "./node_modules", "dist"]
 }

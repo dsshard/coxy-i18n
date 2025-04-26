@@ -3,8 +3,8 @@
 import glob from 'fast-glob'
 import { Command, Option } from 'commander'
 
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 import { DELIMITER } from './config'
 
@@ -35,17 +35,18 @@ if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir)
 }
 
+
 function prepareIsInlineMode (data: Record<string, Record<string, string>>):
   Record<string, string> | Record<string, Record<string, string>> {
   if (!isInline) return data
 
   return Object.keys(data).reduce((acc, path) => {
     const elements = data[path]
-    Object.keys(elements).forEach((elementKey) => {
+    for (const elementKey of Object.keys(elements)) {
       const value = elements[elementKey]
       const newPath = `${String(path)}${DELIMITER}${String(elementKey)}`
       acc[newPath] = value
-    })
+    }
     return acc
   }, {})
 }
@@ -58,11 +59,11 @@ async function run () {
   })
 
   const result = {}
-  files.forEach((fileName) => {
+  for (const fileName of files) {
     const keyName = fileName.replace(rootPath, '.')
     const data = fs.readFileSync(fileName).toString('utf-8')
     result[keyName] = JSON.parse(data)
-  })
+  }
 
   if (!files.length) {
     // eslint-disable-next-line no-console
@@ -70,25 +71,27 @@ async function run () {
     return
   }
 
-  fs.readdirSync(outDir).forEach((f) => fs.rmSync(`${outDir}/${f}`))
+  for (const f of fs.readdirSync(outDir)) {
+    fs.rmSync(`${outDir}/${f}`)
+  }
 
   if (mode === 'split') {
     const locales = {}
 
-    Object.keys(result).forEach((fileName) => {
+    for (const fileName of Object.keys(result)) {
       const localLocales = Object.keys(result[fileName])
 
-      localLocales.forEach((locale) => {
+      for (const locale of localLocales) {
         if (!locales[locale]) locales[locale] = {}
         locales[locale][fileName] = {}
         locales[locale][fileName] = result[fileName][locale]
-      })
-    })
+      }
+    }
 
-    Object.keys(locales).forEach((locale) => {
+    for (const locale of Object.keys(locales)) {
       const writeData = JSON.stringify(prepareIsInlineMode(locales[locale]), null, 2)
       fs.writeFileSync(path.resolve(outDir, `${locale}.json`), writeData, 'utf-8')
-    })
+    }
   }
 
   if (mode === 'single') {

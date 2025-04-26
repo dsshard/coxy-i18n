@@ -6,26 +6,21 @@
   "author": "Steven Green <dsshard@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc"
+    "dev": "tsup --watch",
+    "build": "tsup"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": "please-use-yarn",
+    "yarn": "=1"
+  },
+  "browserslist": ["> 1%, not dead"],
   "devDependencies": {
-    "@coxy/eslint-config": "1.0.6",
+    "@biomejs/biome": "1.9.4",
     "@types/node": "22.10.2",
     "@types/react": "19.0.1",
-    "@typescript-eslint/eslint-plugin": "8.18.0",
-    "@typescript-eslint/parser": "8.18.0",
-    "eslint": "8.57.1",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-config-standard": "17.1.0",
-    "eslint-plugin-filename-rules": "1.3.1",
-    "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-n": "17.15.0",
-    "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-promise": "7.2.1",
-    "nodemon": "3.1.9",
-    "ts-node": "10.9.2",
-    "typescript": "5.7.2"
+    "tsup": "8.4.0",
+    "typescript": "5.8.3"
   },
   "dependencies": {
     "@coxy/i18n-process": "1.0.0",
