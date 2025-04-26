@@ -10,12 +10,4 @@ export default defineConfig({
   splitting: false,
   minify: true,
   sourcemap: true,
-  esbuildOptions(o) {
-    o.drop = ['console', 'debugger']
-    o.minifyIdentifiers = true
-    o.minifySyntax = true
-    o.minifyWhitespace = true
-    o.define = { 'process.env.NODE_ENV': '"production"' }
-  },
-  external: ['crypto', 'net'],
 })
