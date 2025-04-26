@@ -2,6 +2,7 @@
   "name": "@coxy/i18n",
   "version": "1.0.17",
   "main": "dist/src/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/src/index.d.ts",
   "author": "Steven Green <dsshard@gmail.com>",
   "license": "MIT",
